@@ -37,7 +37,6 @@ food-demand-forecasting/
 │
 ├── data/
 │   ├── raw/
-│   ├── interim/
 │   └── processed/
 │
 ├── notebooks/
