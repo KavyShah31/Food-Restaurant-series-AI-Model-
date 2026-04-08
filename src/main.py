@@ -3,19 +3,24 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 import matplotlib.pyplot as plt
+import joblib
 
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 from xgboost import XGBRegressor
 
 
 # ---------------------------
-# LOAD DATA (ROBUST PATH)
+# CONFIG
+# ---------------------------
+st.set_page_config(page_title="Food Demand Forecasting", layout="wide")
+
+
+# ---------------------------
+# LOAD DATA
 # ---------------------------
 @st.cache_data
 def load_data():
-    # Go from src/ → project root
     base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
     file_path = os.path.join(base_path, "data", "processed", "model_ready_data.csv")
 
     if not os.path.exists(file_path):
@@ -29,14 +34,27 @@ def load_data():
 
 
 # ---------------------------
-# TRAIN MODEL (CACHED)
+# LOAD MODEL
 # ---------------------------
 @st.cache_resource
-def train_model(X_train, y_train, n_estimators, max_depth, learning_rate):
+def load_model():
+    base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    model_path = os.path.join(base_path, "models", "xgboost_model.pkl")
+
+    if os.path.exists(model_path):
+        return joblib.load(model_path)
+    return None
+
+
+# ---------------------------
+# TRAIN MODEL (FALLBACK)
+# ---------------------------
+@st.cache_resource
+def train_model(X_train, y_train):
     model = XGBRegressor(
-        n_estimators=n_estimators,
-        max_depth=max_depth,
-        learning_rate=learning_rate,
+        n_estimators=100,
+        max_depth=3,
+        learning_rate=0.01,
         random_state=42
     )
     model.fit(X_train, y_train)
@@ -47,8 +65,6 @@ def train_model(X_train, y_train, n_estimators, max_depth, learning_rate):
 # MAIN APP
 # ---------------------------
 def main():
-    st.set_page_config(page_title="Food Demand Forecasting", layout="wide")
-
     st.title("Food Demand Forecasting Dashboard")
 
     # ---------------------------
@@ -57,24 +73,30 @@ def main():
     df = load_data()
 
     # ---------------------------
-    # SIDEBAR CONTROLS
+    # SIDEBAR
     # ---------------------------
     st.sidebar.header("Controls")
 
-    # Date filter
     start_date = st.sidebar.date_input("Start Date", df['date'].min())
     end_date = st.sidebar.date_input("End Date", df['date'].max())
 
     df = df[(df['date'] >= pd.to_datetime(start_date)) &
             (df['date'] <= pd.to_datetime(end_date))]
 
-    # Train split slider
     split_ratio = st.sidebar.slider("Train Size (%)", 60, 90, 80)
 
-    # Model parameters
-    n_estimators = st.sidebar.slider("n_estimators", 50, 300, 100)
-    max_depth = st.sidebar.slider("max_depth", 2, 10, 3)
-    learning_rate = st.sidebar.slider("learning_rate", 0.01, 0.3, 0.01)
+    # ---------------------------
+    # MODEL INFO PANEL (NEW)
+    # ---------------------------
+    st.sidebar.markdown("### Model Information")
+    st.sidebar.info(
+        """
+        Model: Tuned XGBoost  
+        Validation: TimeSeriesSplit  
+        Features: Lag + Rolling Statistics  
+        Target: Daily Quantity Sold  
+        """
+    )
 
     # ---------------------------
     # DATA OVERVIEW
@@ -98,13 +120,20 @@ def main():
     y_test = y.iloc[train_size:]
 
     # ---------------------------
-    # TRAIN MODEL
+    # LOAD / TRAIN MODEL
     # ---------------------------
-    model = train_model(X_train, y_train, n_estimators, max_depth, learning_rate)
+    model = load_model()
+
+    if model is not None:
+        st.success("Using pre-trained model")
+    else:
+        st.warning("Pre-trained model not found. Training model...")
+        model = train_model(X_train, y_train)
+
     pred = model.predict(X_test)
 
     # ---------------------------
-    # BASELINE (NAIVE)
+    # BASELINE
     # ---------------------------
     naive_pred = X_test['lag_1']
 
@@ -138,7 +167,7 @@ def main():
     st.pyplot(fig)
 
     # ---------------------------
-    # ERROR ANALYSIS
+    # ERROR DISTRIBUTION
     # ---------------------------
     st.subheader("Prediction Error Distribution")
 
@@ -146,7 +175,6 @@ def main():
 
     fig_err, ax_err = plt.subplots()
     ax_err.hist(errors, bins=30)
-    ax_err.set_title("Error Distribution")
 
     st.pyplot(fig_err)
 
@@ -180,7 +208,7 @@ def main():
 
 
 # ---------------------------
-# RUN APP
+# RUN
 # ---------------------------
 if __name__ == "__main__":
     main()
