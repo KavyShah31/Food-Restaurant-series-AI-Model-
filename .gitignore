@@ -1,1 +1,71 @@
+# 🔹 Python cache
+
+**pycache**/
+*.py[cod]
+*$py.class
+
+# 🔹 Virtual environments
+
+.venv/
+venv/
+env/
+
+# 🔹 Jupyter
+
 .ipynb_checkpoints/
+
+# 🔹 Environment variables
+
+.env
+
+# 🔹 Logs
+
+*.log
+logs/
+
+# 🔹 OS files
+
+.DS_Store
+Thumbs.db
+
+# 🔹 IDE
+
+.vscode/
+.idea/
+
+# 🔹 Temp / cache
+
+.cache/
+*.tmp
+*.bak
+*.swp
+
+# 🔹 Build artifacts
+
+dist/
+build/
+*.egg-info/
+
+# 🔹 ML Models (future-proof)
+
+models/
+*.pkl
+*.joblib
+*.h5
+*.pt
+*.pth
+
+# 🔹 Data handling
+
+# Ignore raw data (can be large / private)
+data/raw/
+
+# Keep processed data (needed for reproducibility)
+!data/processed/
+
+# Ensure important processed files are tracked
+!data/processed/*.csv
+
+# 🔹 Experiment tracking (if added later)
+
+mlruns/
