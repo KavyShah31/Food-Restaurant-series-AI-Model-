@@ -1,126 +1,142 @@
-# 🍔 Food Demand Forecasting & Inventory Optimization (AI Project)
-
-# 📌 Overview
-
-This project focuses on building an AI-powered demand forecasting system for a restaurant/food service business. The goal is to predict future demand using historical POS (Point of Sale) data to reduce food waste and optimize inventory.
+# Food Demand Forecasting using Time-Series Machine Learning
 
 ---
 
-# 🎯 Objectives
+## Overview
 
-* Forecast daily food demand using time-series modeling
-* Identify trends, seasonality, and demand patterns
-* Reduce overstocking and stockouts
-* Support data-driven decision making
+This project builds a time-series forecasting system to predict daily food demand for a restaurant using historical sales data.
 
----
+The objective is to enable better inventory planning, reduce food waste, and support data-driven operational decisions.
 
-# 📊 Dataset
-
-**Source:** Simulated restaurant POS data (Balaji Fast Food Sales)
-
-**Features include:**
-
-* Date & Time
-* Item Name & Category
-* Quantity Sold
-* Item Price
-* Transaction Amount
-* Transaction Type
-* Time of Sale
-* Customer Information
+The project follows a structured machine learning pipeline:
+- Time-series analysis and decomposition
+- Feature engineering with lag and rolling statistics
+- Model training using regression algorithms
+- Hyperparameter tuning using time-aware validation
+- Model evaluation and interpretation
 
 ---
 
-# 🏗️ Project Structure
+## Objectives
 
-```
-food-demand-forecasting/
+- Forecast daily food demand using historical data  
+- Capture trend, seasonality, and temporal dependencies  
+- Compare baseline and advanced machine learning models  
+- Reduce overstocking and stockouts  
+- Enable data-driven decision making  
+
+---
+
+## Dataset
+
+**Source:** Simulated restaurant POS dataset (Balaji Fast Food Sales)
+
+### Features:
+- Date and time of transaction  
+- Item name and category  
+- Quantity sold (target variable)  
+- Item price and transaction amount  
+- Transaction type and time of sale  
+
+---
+
+## Project Structure
+
+Food-Restaurant-series-AI-Model/
 │
 ├── data/
-│   ├── raw/
-│   └── processed/
+│ ├── raw/
+│ │ └── balaji_fast_food_sales_dataset.csv
+│ │
+│ └── processed/
+│ ├── daily_demand.csv
+│ ├── model_ready_data.csv
+│ ├── train.csv
+│ └── test.csv
 │
 ├── notebooks/
-│   ├── EDA_Notebook_Balaji.ipynb
-│   ├── Person3_Model_Training.ipynb
+│ ├── w1_time_series_eda.ipynb
+│ ├── w2_feature_engineering.ipynb
+│ └── week3_Model_Training.ipynb
 │
-├── src/
-├── models/
-├── reports/
-│
+├── main.py
 ├── requirements.txt
-├── README.md
-└── main.py
-```
+└── README.md
+
 
 ---
 
-# ✅ Week 1 Progress (Completed)
+## Week 1: Time-Series EDA
 
-* Data cleaning and preprocessing
-* Time-series dataset creation
-* Trend analysis
-* Seasonality detection
-* Time-series decomposition
-* Autocorrelation analysis (ACF, PACF)
-
----
-
-# ✅ Week 2 Progress (Completed)
-
-* Feature Engineering
-* Date-based features
-* Lag features creation
-* Rolling mean features
-* Model-ready dataset preparation
-* Train-Test split (Time-series based)
+- Data cleaning and preprocessing  
+- Daily demand aggregation  
+- Trend and seasonality analysis  
+- Time-series decomposition  
+- Autocorrelation (ACF) and partial autocorrelation (PACF) analysis  
 
 ---
 
-# ✅ Week 3 Progress (Completed — Person 3)
+## Week 2: Feature Engineering
 
-## 🤖 Model Training & Tuning
-
-Three regression models were implemented:
-
-### 1. Linear Regression
-
-Baseline model for demand forecasting
-
-### 2. Random Forest Regressor
-
-Handled non-linear demand patterns
-
-### 3. XGBoost Regressor
-
-Advanced gradient boosting model for improved accuracy
+- Date-based features (day, month, weekday)  
+- Lag features (lag_1, lag_3, lag_7, lag_14, etc.)  
+- Rolling statistics (mean, std, min, max)  
+- Trend feature creation  
+- Cyclical encoding for seasonality  
+- Time-series train-test split  
 
 ---
 
-# 📊 Model Evaluation
+## Week 3: Model Training and Selection
 
-Models evaluated using:
+### Models Implemented
 
-* Mean Absolute Error (MAE)
-* Root Mean Squared Error (RMSE)
+1. **Naive Baseline**
+   - Uses previous day's demand as prediction
 
-## Model Comparison
+2. **Linear Regression**
+   - Baseline machine learning model
+
+3. **Random Forest Regressor**
+   - Captures non-linear relationships
+
+4. **XGBoost Regressor**
+   - Gradient boosting model for high accuracy
+
+---
+
+## Hyperparameter Tuning
+
+- Performed using **GridSearchCV**
+- Used **TimeSeriesSplit** to preserve temporal order
+- Prevents data leakage and ensures realistic validation
+
+---
+
+## Model Evaluation
+
+Models were evaluated using:
+
+- **Mean Absolute Error (MAE)**
+- **Root Mean Squared Error (RMSE)**
+
+### Model Comparison
 
 | Model             | MAE      | RMSE     |
-| ----------------- | -------- | -------- |
-| Linear Regression | 5.02     | 6.15     |
-| Random Forest     | 4.00     | 4.74     |
-| XGBoost           | 4.02     | 4.72     |
-| **Tuned XGBoost** | **3.90** | **4.46** |
+|------------------|----------|----------|
+| Naive Baseline   | —        | —        |
+| Linear Regression| 5.02     | 6.15     |
+| Random Forest    | 4.00     | 4.74     |
+| XGBoost          | 4.02     | 4.72     |
+| **Tuned XGBoost**| **3.90** | **4.46** |
 
 ---
 
-# 🏆 Best Model Selected
+## Best Model
 
 **Tuned XGBoost Regressor**
 
-Best Hyperparameters:
+### Best Hyperparameters:
 
 ```
 learning_rate = 0.01
@@ -130,73 +146,101 @@ n_estimators = 100
 
 ---
 
-# 📈 Key Metrics
+## Key Metrics
 
-* Mean Absolute Error (MAE)
-* Root Mean Squared Error (RMSE)
-
----
-
-# 🛠️ Tech Stack
-
-* Python
-* Pandas
-* NumPy
-* Matplotlib
-* Seaborn
-* Scikit-learn
-* XGBoost
-* Statsmodels
-* Google Colab
+- **MAE**: 3.90 (average error of ~4 units)
+- **RMSE**: 4.46 (captures larger errors effectively)
 
 ---
 
-# 🚀 Business Impact
+## Key Insights
 
-* Reduced food waste
-* Improved inventory planning
-* Better demand prediction
-* Data-driven restaurant operations
+- Lag features are the most important predictors of demand  
+- Rolling statistics improve model stability  
+- XGBoost significantly outperforms baseline models  
+- Time-series cross-validation improves generalization  
+
+---
+## Tech Stack
+
+- **Python 3.10+**
+- **Pandas** - Data manipulation
+- **NumPy** - Numerical operations
+- **Matplotlib & Seaborn** - Visualization
+- **Scikit-learn** - Machine learning models
+- **XGBoost** - Gradient boosting
+- **Statsmodels** - Time-series analysis
+- **Google Colab** - Development environment
 
 ---
 
-# ▶️ How to Run
+## Business Impact
 
-Install dependencies:
-
-```
-pip install -r requirements.txt
-```
-
-Run project:
-
-```
-python main.py
-```
+- **Reduced food waste** through accurate demand prediction  
+- **Optimized inventory levels**  
+- **Improved stock availability**  
+- **Data-driven operational decisions**  
+- **Better understanding of demand patterns**  
 
 ---
 
-# 👨‍💻 Contributors
+## How to Run
 
-* Person 1 — Data Cleaning & EDA
-* Person 2 — Feature Engineering
-* Person 3 — Model Training & Tuning
-* Person 4 — Evaluation & Documentation
+1. **Clone the repository:**
+   ```bash
+   git clone <repository-url>
+   cd Food-Restaurant-series-AI-Model-
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Run the main script:**
+   ```bash
+   python main.py
+   ```
 
 ---
 
-# 📌 Future Improvements
+## Notebooks Overview
 
-* Prophet Model Integration
-* Deep Learning (LSTM) Forecasting
-* Real-time Dashboard
-* API Deployment
+- **w1_time_series_eda.ipynb** - Exploratory data analysis and time-series decomposition
+- **w2_feature_engineering.ipynb** - Feature creation and train-test split
+- **week3_Model_Training.ipynb** - Model training, tuning, and evaluation
 
 ---
 
-# ⭐ Project Status
+## Future Improvements
 
-✅ Week 1 Completed
-✅ Week 2 Completed
-✅ Week 3 Completed
-⬜ Week 4 In Progress
+- **Prophet model integration** for improved forecasting
+- **Deep learning models** (LSTM, GRU) for complex patterns
+- **Real-time dashboard** with interactive visualizations
+- **API deployment** for production use
+- **External factors** (weather, holidays, events)
+- **Advanced feature engineering** (Fourier terms, interaction features)
+
+---
+
+## Project Status
+
+- Week 1 Completed  
+- Week 2 Completed  
+- Week 3 Completed  
+- Week 4 In Progress  
+
+---
+
+## Contributors
+
+- **Person 1** - Data Cleaning & EDA
+- **Person 2** - Feature Engineering
+- **Person 3** - Model Training & Tuning
+- **Person 4** - Evaluation & Documentation
+
+---
+
+## License
+
+This project is licensed under the MIT License.
