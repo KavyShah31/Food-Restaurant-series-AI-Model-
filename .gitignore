@@ -48,9 +48,7 @@ build/
 
 # 🔹 ML Models (future-proof)
 
-models/
-*.pkl
-*.joblib
+# Ignore only large model files if needed
 *.h5
 *.pt
 *.pth
