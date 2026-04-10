@@ -194,10 +194,27 @@ streamlit run src/main.py
 
 ---
 
-## 📸 Dashboard Preview *(Optional but Recommended)*
+## 📸 Dashboard Preview 
 
-*Add screenshots here for better presentation*
+<p align="center">
+  <a href="https://github.com/user-attachments/assets/2a7434bb-8653-4527-a943-e3f2a2c8a3df">
+    <img width="45%" src="https://github.com/user-attachments/assets/2a7434bb-8653-4527-a943-e3f2a2c8a3df" />
+  </a>
+  <a href="https://github.com/user-attachments/assets/41d52d41-b5cf-41fa-8f05-341bc00b64fc">
+    <img width="45%" src="https://github.com/user-attachments/assets/41d52d41-b5cf-41fa-8f05-341bc00b64fc" />
+  </a>
+</p>
 
+<p align="center">
+  <a href="https://github.com/user-attachments/assets/90259845-5752-49a7-907f-ccd2637bea9f">
+    <img width="45%" src="https://github.com/user-attachments/assets/90259845-5752-49a7-907f-ccd2637bea9f" />
+  </a>
+  <a href="https://github.com/user-attachments/assets/f5c36a23-78f3-4f9e-ae22-8f31f39cc9b4">
+    <img width="45%" src="https://github.com/user-attachments/assets/f5c36a23-78f3-4f9e-ae22-8f31f39cc9b4" />
+  </a>
+</p>
+
+---
 ---
 
 ## 💼 Business Impact
